@@ -1,4 +1,4 @@
-use image::{DynamicImage, Rgba, GenericImageView, Pixel};
+use image::{DynamicImage, GenericImageView, Pixel, Rgba};
 use indicatif::ProgressBar;
 use log::debug;
 
@@ -43,11 +43,10 @@ pub fn euclidean_diff(
     let mut diffs: Vec<f32> = Vec::with_capacity(pixels as usize);
     let diff = |img1: (u8, u8, u8), img2: (u8, u8, u8)| -> f32 {
         debug!("Generating diff for {:#?} and {:#?}", img1, img2);
-        ((
-            ((img1.0.saturating_sub(img2.0)) as u32).pow(2)
+        ((((img1.0.saturating_sub(img2.0)) as u32).pow(2)
             + ((img1.1.saturating_sub(img2.1)) as u32).pow(2)
-            + ((img1.2.saturating_sub(img2.2)) as u32).pow(2)) as f32
-            ).sqrt()
+            + ((img1.2.saturating_sub(img2.2)) as u32).pow(2)) as f32)
+            .sqrt()
     };
     let split = |pxl: Rgba<u8>| -> (u8, u8, u8) {
         (pxl.channels()[0], pxl.channels()[1], pxl.channels()[2])

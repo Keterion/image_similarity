@@ -25,22 +25,12 @@ pub enum Method {
 }
 
 #[derive(Clone, Args)]
-#[group(required = true, multiple = false)]
+#[group(required = true, multiple = true)]
 pub struct Scaling {
     /// Resize by amount, 1 = full, 2 = half, 4 = quarter
     #[clap(short, long)]
     pub ratio: Option<String>,
-    /// Split into averaged segments
+    /// Split into averaged segments, uses smallest image to determine segment width and height
     #[clap(short, long)]
     pub segments: Option<u32>,
-    /// Presets
-    #[clap(short, long)]
-    pub preset: Option<ScalingPreset>,
-}
-
-#[derive(ValueEnum, Clone)]
-pub enum ScalingPreset {
-    Full,
-    Half,
-    Tenths,
 }
