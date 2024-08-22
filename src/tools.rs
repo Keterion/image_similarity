@@ -1,6 +1,10 @@
 use image::{DynamicImage, GenericImageView, Pixel};
 
-pub fn average_section(image: &DynamicImage, section_bounds: (u32, u32), start: (u32, u32)) -> [f32; 3] {
+pub fn average_section(
+    image: &DynamicImage,
+    section_bounds: (u32, u32),
+    start: (u32, u32),
+) -> [f32; 3] {
     let s_img = image.view(start.0, start.1, section_bounds.0, section_bounds.1);
     let mut r_sum: u32 = 0;
     let mut g_sum: u32 = 0;
@@ -18,6 +22,7 @@ pub fn average_section(image: &DynamicImage, section_bounds: (u32, u32), start: 
     ]
 }
 pub fn average_sections(image: &DynamicImage, section_splits: u32) -> Vec<[f32; 3]> {
+    todo!("implement sections");
     let section_count = (section_splits + 1).pow(2);
     let section_width = image.width() / (section_splits + 1);
     let section_height = image.height() / (section_splits + 1);
@@ -25,22 +30,27 @@ pub fn average_sections(image: &DynamicImage, section_splits: u32) -> Vec<[f32; 
     for _ in 0..section_count {
         sections.push([0.0; 3]);
     }
-    for (i, (_, _, pixel)) in image.pixels().enumerate() {
-        let mut index = 0;
+    for (x, y, pixel) in image.pixels() {
         todo!("You need to take x and y and somehow get in which segment that is");
-        sections.get_mut(index as usize).unwrap()[0] += pixel.0[0] as f32;
-        sections.get_mut(index as usize).unwrap()[1] += pixel.0[1] as f32;
-        sections.get_mut(index as usize).unwrap()[2] += pixel.0[2] as f32;
     }
     dbg!(&sections);
-    sections.iter().map(|section| [
-        section[0] / (section_width * section_height) as f32,
-        section[1] / (section_width * section_height) as f32,
-        section[2] / (section_width * section_height) as f32,
-    ]).collect()
+    sections
+        .iter()
+        .map(|section| {
+            [
+                section[0] / (section_width * section_height) as f32,
+                section[1] / (section_width * section_height) as f32,
+                section[2] / (section_width * section_height) as f32,
+            ]
+        })
+        .collect()
 }
 
-pub fn determine_segment_dimensions(total_width: u32, total_height: u32, segments: u8) -> (u32, u32) {
+pub fn determine_segment_dimensions(
+    total_width: u32,
+    total_height: u32,
+    segments: u8,
+) -> (u32, u32) {
     (
         total_width / segments as u32,
         total_height / segments as u32,

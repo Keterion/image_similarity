@@ -22,6 +22,8 @@ pub struct Arguments {
 pub enum Method {
     /// Use euclidean distance, aka Pythagorean distance
     Euclidean,
+    /// Downscale the image and generate a fingerprint
+    Fingerprint,
 }
 
 #[derive(Clone, Args)]

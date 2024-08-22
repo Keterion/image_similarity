@@ -6,6 +6,7 @@ use log::{debug, info};
 
 mod cli;
 mod euclidean;
+mod fingerprint;
 mod tools;
 
 use cli::*;
@@ -23,19 +24,14 @@ fn main() {
     let args = Arguments::parse();
     let mut img1 = image::open(&args.images[0]).unwrap();
     let mut img2 = image::open(&args.images[1]).unwrap();
-    let mut use_segments: bool = false;
-    let mut segments = 1;
+    //let mut use_segments: bool = false;
+    //let mut segments = 1;
 
-    
     let tmp = average_sections(&img1, 2);
     dbg!(&tmp);
     let mut i_tmp = image::RgbImage::new(3, 3);
     for (pixel, val) in i_tmp.pixels_mut().zip(tmp) {
-        pixel.0 = [
-            val[0] as u8,
-            val[1] as u8,
-            val[2] as u8,
-        ];
+        pixel.0 = [val[0] as u8, val[1] as u8, val[2] as u8];
     }
     i_tmp.save("tmp.png");
 
@@ -51,11 +47,11 @@ fn main() {
             img2 = resize(&img2, r, imageops::FilterType::Lanczos3);
         }
     }
-    if let Some(new_segments) = args.scaling.segments {
-        debug!("Using {} averaged segments", new_segments);
-        use_segments = true;
-        segments = new_segments;
-    }
+    //if let Some(new_segments) = args.scaling.segments {
+    //    debug!("Using {} averaged segments", new_segments);
+    //    use_segments = true;
+    //    segments = new_segments;
+    //}
 
     let (width, height) = get_max_image_sizes(vec![&img1, &img2]);
 
@@ -77,5 +73,6 @@ fn main() {
                 println!("{}", diff);
             }
         }
+        Method::Fingerprint => {}
     }
 }
