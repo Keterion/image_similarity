@@ -8,10 +8,12 @@ mod cli;
 mod euclidean;
 mod fingerprint;
 mod tools;
+mod ssim;
 
 use cli::*;
 use euclidean::*;
 use tools::*;
+use fingerprint::*;
 
 fn main() {
     // logging
@@ -27,14 +29,14 @@ fn main() {
     //let mut use_segments: bool = false;
     //let mut segments = 1;
 
-    let tmp = average_sections(&img1, 2);
-    dbg!(&tmp);
-    let mut i_tmp = image::RgbImage::new(3, 3);
-    for (pixel, val) in i_tmp.pixels_mut().zip(tmp) {
-        pixel.0 = [val[0] as u8, val[1] as u8, val[2] as u8];
-    }
-    i_tmp.save("tmp.png");
-
+    //let tmp = average_sections(&img1, 2);
+    //dbg!(&tmp);
+    //let mut i_tmp = image::RgbImage::new(3, 3);
+    //for (pixel, val) in i_tmp.pixels_mut().zip(tmp) {
+    //    pixel.0 = [val[0] as u8, val[1] as u8, val[2] as u8];
+    //}
+    //i_tmp.save("tmp.png");
+    
     let resize =
         |image: &DynamicImage, factor: u32, filter_type: imageops::FilterType| -> DynamicImage {
             image.resize(image.width() / factor, image.height() / factor, filter_type)
@@ -73,6 +75,15 @@ fn main() {
                 println!("{}", diff);
             }
         }
-        Method::Fingerprint => {}
+        Method::Fingerprint => {
+            let fp1 = gen_fingerprint(&img1);
+            let fp2 = gen_fingerprint(&img2);
+            
+            let r_diff = fp1[0] as f64 - fp2[0] as f64;
+            let g_diff = fp1[1] as f64 - fp2[1] as f64;
+            let b_diff = fp1[2] as f64 - fp2[2] as f64;
+            let avg_diff: f32 = (r_diff + g_diff + b_diff) as f32 / 3.0;
+            println!("Average difference: {}", avg_diff);
+        }
     }
 }

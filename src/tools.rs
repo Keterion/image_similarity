@@ -1,4 +1,4 @@
-use image::{DynamicImage, GenericImageView, Pixel};
+use image::{DynamicImage, GenericImageView, Pixel, RgbImage};
 
 pub fn average_section(
     image: &DynamicImage,
@@ -84,4 +84,14 @@ pub fn get_min_image_sizes(images: Vec<&DynamicImage>) -> (u32, u32) {
         }
     }
     (min_width, min_height)
+}
+pub fn save_img_from_arr(pixels: &[[u8; 3]], dimensions: (u32, u32), name: &str) {
+    if pixels.len() < (dimensions.0 as usize * dimensions.1 as usize) {
+        return;
+    }
+    let mut img = RgbImage::new(dimensions.0, dimensions.1);
+    for (value, pixel) in pixels.iter().zip(img.pixels_mut()) {
+        pixel.0 = *value;
+    }
+    img.save(name).unwrap();
 }
