@@ -2,6 +2,7 @@
 name = "similarity"
 version = "0.0.0"
 edition = "2021"
+default-run = "similarity"
 
 [dependencies]
 clap = { version = "4.5.16", features = ["derive"] }

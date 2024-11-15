@@ -24,10 +24,12 @@ pub enum Method {
     Euclidean,
     /// Downscale the image and generate a fingerprint
     Fingerprint,
+    /// Use Structural Similarity Measurement
+    SSIM,
 }
 
 #[derive(Clone, Args)]
-#[group(required = true, multiple = true)]
+#[group(required = false, multiple = false)]
 pub struct Scaling {
     /// Resize by amount, 1 = full, 2 = half, 4 = quarter
     #[clap(short, long)]
